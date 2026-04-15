@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+
+    <style>
+      /* ===== Reset ===== */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background: #f1f3f5;
+      }
+
+      /* ===== Layout ===== */
+      .layout {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        min-height: 100vh;
+      }
+
+      /* ===== Blocks ===== */
+      .layout__header,
+      .layout__footer {
+        background: #ffffff;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .layout__sidebar,
+      .layout__right {
+        background: #ffffff;
+        padding: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .layout__main {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px;
+      }
+
+      /* ===== Card ===== */
+      .card {
+        flex: 1 1 100%;
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 6px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      }
+
+      /* ===== Tablet ===== */
+      @media (min-width: 768px) {
+        .layout {
+          display: grid;
+          grid-template-columns: 220px 1fr;
+          grid-template-rows: auto 1fr auto;
+          grid-template-areas:
+            "header header"
+            "sidebar main"
+            "footer footer";
+        }
+
+        .layout__header {
+          grid-area: header;
+        }
+        .layout__sidebar {
+          grid-area: sidebar;
+        }
+        .layout__main {
+          grid-area: main;
+        }
+        .layout__footer {
+          grid-area: footer;
+        }
+
+        .layout__right {
+          display: none;
+        }
+
+        .card {
+          flex: 1 1 calc(50% - 10px);
+        }
+      }
+
+      /* ===== Desktop ===== */
+      @media (min-width: 1024px) {
+        .layout {
+          grid-template-columns: 220px 1fr 260px;
+          grid-template-areas:
+            "header header header"
+            "sidebar main right"
+            "footer footer footer";
+        }
+
+        .layout__right {
+          display: block;
+          grid-area: right;
+        }
+
+        .card {
+          flex: 1 1 calc(33.33% - 10px);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="layout">
+      <header class="layout__header">Header</header>
+
+      <aside class="layout__sidebar">Sidebar</aside>
+
+      <main class="layout__main">
+        <div class="card">Card 1</div>
+        <div class="card">Card 2</div>
+        <div class="card">Card 3</div>
+        <div class="card">Card 4</div>
+        <div class="card">Card 5</div>
+        <div class="card">Card 6</div>
+        <div class="card">Card 7</div>
+        <div class="card">Card 8</div>
+      </main>
+
+      <aside class="layout__right">Right Panel</aside>
+
+      <footer class="layout__footer">Footer</footer>
+    </div>
+  </body>
+</html>

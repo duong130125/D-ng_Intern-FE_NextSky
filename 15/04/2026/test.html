@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo List</title>
+    <style>
+      /* Giao diện (UI/UX) */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .todo-container {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 400px;
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .todo-input {
+        display: flex;
+        margin-bottom: 20px;
+      }
+
+      .todo-input input {
+        flex-grow: 1;
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+
+      .todo-input button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-left: 8px;
+      }
+
+      .todo-input button:hover {
+        background-color: #0056b3;
+      }
+
+      .todo-list {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      .todo-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px;
+        border-bottom: 1px solid #f1f1f1;
+      }
+
+      .todo-item.completed {
+        text-decoration: line-through;
+        color: #888;
+      }
+
+      .todo-item button {
+        background-color: transparent;
+        color: #007bff;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      .todo-item button:hover {
+        color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="todo-container">
+      <h1>Todo List</h1>
+      <div class="todo-input">
+        <input type="text" placeholder="Thêm công việc mới" id="todo-input" />
+        <button id="add-todo">Add</button>
+      </div>
+      <ul class="todo-list" id="todo-list"></ul>
+    </div>
+
+    <script>
+      // Lấy các phần tử DOM
+      const todoInput = document.getElementById("todo-input");
+      const addTodoButton = document.getElementById("add-todo");
+      const todoList = document.getElementById("todo-list");
+
+      // Lấy dữ liệu từ LocalStorage
+      let todos = JSON.parse(localStorage.getItem("todos")) || [];
+      renderTodos();
+
+      // Thêm công việc mới
+      todoInput.addEventListener("keyup", (e) => {
+        if (e.key === "Enter") {
+          addTodo();
+        }
+      });
+
+      addTodoButton.addEventListener("click", addTodo);
+
+      function addTodo() {
+        const todoText = todoInput.value.trim();
+        if (todoText === "") {
+          // Hiển thị thông báo nếu để trống ô nhập
+          alert("Vui lòng nhập nội dung công việc.");
+          return;
+        }
+
+        const newTodo = {
+          id: Date.now(),
+          text: todoText,
+          completed: false,
+        };
+
+        todos.push(newTodo);
+        saveTodos();
+        renderTodos();
+        todoInput.value = "";
+      }
+
+      // Đánh dấu công việc hoàn thành
+      function toggleTodo(id) {
+        todos = todos.map((todo) => {
+          if (todo.id === id) {
+            return { ...todo, completed: !todo.completed };
+          }
+          return todo;
+        });
+        saveTodos();
+        renderTodos();
+      }
+
+      // Xóa công việc
+      function deleteTodo(id) {
+        todos = todos.filter((todo) => todo.id !== id);
+        saveTodos();
+        renderTodos();
+      }
+
+      // Chỉnh sửa công việc
+      function editTodo(id) {
+        const todo = todos.find((t) => t.id === id);
+        const newText = prompt("Chỉnh sửa công việc:", todo.text);
+        if (newText !== null && newText.trim() !== "") {
+          todo.text = newText.trim();
+          saveTodos();
+          renderTodos();
+        }
+      }
+
+      // Hiển thị danh sách công việc
+      function renderTodos() {
+        todoList.innerHTML = "";
+        todos.forEach((todo) => {
+          const todoItem = document.createElement("li");
+          todoItem.classList.add("todo-item");
+          if (todo.completed) {
+            todoItem.classList.add("completed");
+          }
+
+          const todoText = document.createElement("span");
+          todoText.textContent = todo.text;
+
+          const toggleButton = document.createElement("button");
+          toggleButton.textContent = todo.completed ? "✓" : "☐";
+          toggleButton.addEventListener("click", () => toggleTodo(todo.id));
+
+          const editButton = document.createElement("button");
+          editButton.textContent = "✎";
+          editButton.addEventListener("click", () => editTodo(todo.id));
+
+          const deleteButton = document.createElement("button");
+          deleteButton.textContent = "✕";
+          deleteButton.addEventListener("click", () => deleteTodo(todo.id));
+
+          todoItem.appendChild(toggleButton);
+          todoItem.appendChild(todoText);
+          todoItem.appendChild(editButton);
+          todoItem.appendChild(deleteButton);
+          todoList.appendChild(todoItem);
+        });
+      }
+
+      // Lưu dữ liệu vào LocalStorage
+      function saveTodos() {
+        localStorage.setItem("todos", JSON.stringify(todos));
+      }
+    </script>
+  </body>
+</html>
