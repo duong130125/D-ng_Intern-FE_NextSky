@@ -1,0 +1,27 @@
+.card {
+  width: 300px;
+  padding: 30px;
+  background-color: rgb(181.9539748954, 217.9372384937, 242.0460251046);
+  border: 1px solid #3498db;
+  border-radius: 8px;
+}
+.card .card-header {
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+.card .card-header h2 {
+  font-size: 1.5rem;
+  color: rgb(29.2970711297, 110.6778242678, 165.2029288703);
+}
+.card .card-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1.6;
+}
+.card:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  cursor: pointer;
+}

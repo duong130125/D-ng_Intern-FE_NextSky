@@ -1,0 +1,54 @@
+// 1. Nạp module màu sắc (Bắt buộc để dùng các hàm màu mới)
+@use "sass:color";
+
+// 2. Khai báo biến
+$primary-color: #3498db;
+$secondary-color: #2ecc71;
+$dark-text: #2c3e50;
+$padding-unit: 15px;
+
+// 3. Mixin
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  border-radius: $radius;
+}
+
+// 4. Sử dụng Nesting và Mixin
+.card {
+  width: 300px;
+  padding: $padding-unit * 2; 
+  
+  // Dùng color.adjust thay cho lighten
+  background-color: color.adjust($primary-color, $lightness: 30%); 
+  border: 1px solid $primary-color;
+  @include border-radius(8px);
+
+  .card-header {
+    font-weight: bold;
+    color: $dark-text;
+    margin-bottom: $padding-unit;
+    
+    h2 {
+      font-size: 1.5rem;
+      // Dùng color.adjust với số âm thay cho darken
+      color: color.adjust($primary-color, $lightness: -15%); 
+    }
+  }
+
+  .card-body {
+    @include flex-center;
+    line-height: 1.6;
+  }
+
+  &:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    background-color: white;
+    cursor: pointer;
+  }
+}
