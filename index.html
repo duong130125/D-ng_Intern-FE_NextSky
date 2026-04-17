@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>To-Do App</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2>📝 To-Do List</h2>
+
+      <div class="input-group">
+        <input id="taskInput" placeholder="Nhập công việc..." />
+        <button onclick="addTask()">Thêm</button>
+      </div>
+
+      <div class="filters">
+        <button onclick="filterTasks('all')">Tất cả</button>
+        <button onclick="filterTasks('active')">Chưa xong</button>
+        <button onclick="filterTasks('done')">Đã xong</button>
+      </div>
+
+      <ul id="taskList"></ul>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
