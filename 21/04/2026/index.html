@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>jQuery Premium UI Demo</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: #fff;
+        padding: 40px;
+      }
+
+      h2 {
+        margin: 30px 0 10px;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      button {
+        padding: 10px 18px;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        background: #fff;
+        color: #333;
+        font-weight: 600;
+        transition: 0.3s;
+      }
+
+      button:hover {
+        transform: scale(1.05);
+      }
+
+      input {
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+        margin-right: 10px;
+      }
+
+      ul {
+        list-style: none;
+        margin-top: 10px;
+      }
+      li {
+        background: #fff;
+        color: #333;
+        padding: 10px;
+        border-radius: 10px;
+        margin-bottom: 8px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      /* Tabs */
+      .tab-btn {
+        margin-right: 10px;
+      }
+      .tab-content {
+        display: none;
+        margin-top: 10px;
+      }
+      .active {
+        display: block;
+      }
+
+      /* Accordion */
+      .accordion h3 {
+        cursor: pointer;
+        padding: 10px;
+        background: #fff;
+        color: #333;
+        border-radius: 10px;
+        margin-top: 5px;
+      }
+      .accordion p {
+        display: none;
+        padding: 10px;
+        background: #f1f1f1;
+        color: #333;
+        border-radius: 10px;
+      }
+
+      /* Modal */
+      #modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: none;
+        justify-content: center;
+        align-items: center;
+      }
+      #modal .box {
+        background: #fff;
+        color: #333;
+        padding: 30px;
+        border-radius: 20px;
+      }
+
+      /* Slider */
+      .slider img {
+        width: 100%;
+        border-radius: 15px;
+        display: none;
+      }
+      .slider img.active {
+        display: block;
+      }
+
+      /* Dropdown */
+      #menuList {
+        display: none;
+        margin-top: 10px;
+        background: #fff;
+        color: #333;
+        border-radius: 10px;
+        padding: 10px;
+      }
+
+      /* Top button */
+      #topBtn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        display: none;
+        background: #ffcc00;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h2>To-Do List</h2>
+      <input id="taskInput" placeholder="Nhập task..." />
+      <button id="addTask">Add</button>
+      <ul id="taskList"></ul>
+    </div>
+
+    <div class="card">
+      <h2>Tabs</h2>
+      <button class="tab-btn" data-tab="1">Tab 1</button>
+      <button class="tab-btn" data-tab="2">Tab 2</button>
+      <div id="tab-1" class="tab-content active">Nội dung 1</div>
+      <div id="tab-2" class="tab-content">Nội dung 2</div>
+    </div>
+
+    <div class="card accordion">
+      <h2>Accordion</h2>
+      <h3>Section 1</h3>
+      <p>Content 1</p>
+      <h3>Section 2</h3>
+      <p>Content 2</p>
+    </div>
+
+    <div class="card">
+      <h2>Modal</h2>
+      <button id="openModal">Open Modal</button>
+    </div>
+
+    <div id="modal">
+      <div class="box">
+        <p>Đây là modal xịn hơn 😎</p>
+        <button id="closeModal">Close</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Slider</h2>
+      <div class="slider">
+        <img src="https://picsum.photos/600/300?1" class="active" />
+        <img src="https://picsum.photos/600/300?2" />
+        <img src="https://picsum.photos/600/300?3" />
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Dropdown</h2>
+      <button id="menuBtn">Menu</button>
+      <ul id="menuList">
+        <li>Item 1</li>
+        <li>Item 2</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>AJAX</h2>
+      <button id="loadData">Load Data</button>
+      <div id="result"></div>
+    </div>
+
+    <div class="card">
+      <h2>Form</h2>
+      <form id="myForm">
+        <input id="name" placeholder="Tên" />
+        <button>Submit</button>
+      </form>
+    </div>
+
+    <button id="topBtn">↑</button>
+
+    <script>
+      $(function () {
+        // Todo
+        $("#addTask").click(function () {
+          let v = $("#taskInput").val();
+          if (v) {
+            $("#taskList").append(
+              `<li>${v} <button class='del'>X</button></li>`,
+            );
+            $("#taskInput").val("");
+          }
+        });
+        $(document).on("click", ".del", function () {
+          $(this).parent().remove();
+        });
+
+        // Tabs
+        $(".tab-btn").click(function () {
+          let t = $(this).data("tab");
+          $(".tab-content").removeClass("active");
+          $("#tab-" + t).addClass("active");
+        });
+
+        // Accordion
+        $(".accordion h3").click(function () {
+          $(this).next().slideToggle();
+        });
+
+        // Modal
+        $("#openModal").click(() => $("#modal").fadeIn());
+        $("#closeModal").click(() => $("#modal").fadeOut());
+
+        // Slider
+        let i = 0;
+        setInterval(() => {
+          let s = $(".slider img");
+          s.removeClass("active");
+          i = (i + 1) % s.length;
+          s.eq(i).fadeIn().addClass("active");
+        }, 2500);
+
+        // Dropdown
+        $("#menuBtn").click(() => $("#menuList").slideToggle());
+
+        // AJAX
+        $("#loadData").click(() => {
+          $.get("https://jsonplaceholder.typicode.com/posts/1")
+            .done((d) =>
+              $("#result").html(`<h4>${d.title}</h4><p>${d.body}</p>`),
+            )
+            .fail(() => alert("API lỗi"));
+        });
+
+        // Form
+        $("#myForm").submit(function (e) {
+          if (!$("#name").val()) {
+            alert("Nhập tên");
+            e.preventDefault();
+          }
+        });
+
+        // Top
+        $(window).scroll(() => {
+          $(window).scrollTop() > 100
+            ? $("#topBtn").fadeIn()
+            : $("#topBtn").fadeOut();
+        });
+        $("#topBtn").click(() => $("html,body").animate({ scrollTop: 0 }, 500));
+      });
+    </script>
+  </body>
+</html>
